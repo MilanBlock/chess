@@ -1,5 +1,5 @@
--- Tilemap will be saved left to right, top to bottom
-TILEMAP = {
+-- spritemap will be saved left to right, top to bottom
+SPRITEMAP = {
     positions = {
         "tile_blue",
         "tile_orange",
@@ -55,5 +55,37 @@ TILEMAP = {
         "black_hover",
         "white_dot",
         "black_dot"
-    }
+    },
+    size_sprite = 16
 }
+
+function love.load()
+    -- Load spritemap
+    SPRITEMAP.image = love.graphics.newImage("assets/spritemap.png")
+
+    SPRITEMAP.width = SPRITEMAP.image:getWidth()
+    SPRITEMAP.height = SPRITEMAP.image:getHeight()
+
+    SPRITEMAP.sprites_x = SPRITEMAP.width / (SPRITEMAP.size_sprite + 1)
+    SPRITEMAP.sprites_y = SPRITEMAP.height / (SPRITEMAP.size_sprite + 1)
+
+    -- Create map of quads
+    SPRITEMAP.quads = {}
+    for y = 1, SPRITEMAP.sprites_y do
+        for x = 1, SPRITEMAP.sprites_x do
+            SPRITEMAP.quads[SPRITEMAP.positions[x + (y - 1) * SPRITEMAP.sprites_x]] = love.graphics.newQuad(
+                (x - 1) * (SPRITEMAP.size_sprite + 1),
+                (y - 1) * (SPRITEMAP.size_sprite + 1),
+                SPRITEMAP.size_sprite,
+                SPRITEMAP.size_sprite,
+                SPRITEMAP.width,
+                SPRITEMAP.height)
+        end
+    end
+end
+
+function love.draw()
+    for index, sprite in ipairs(SPRITEMAP.positions) do
+        love.graphics.draw(SPRITEMAP.image, SPRITEMAP.quads[sprite], index * SPRITEMAP.size_sprite, 10)
+    end
+end
