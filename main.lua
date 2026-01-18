@@ -60,6 +60,11 @@ SPRITEMAP = {
 }
 
 function love.load()
+    -- Load SYSL-Pixel
+    _G.gscreen = require("lib.pixel")
+    gscreen.load(4)
+    gscreen.toggle_cursor()
+
     -- Load spritemap
     SPRITEMAP.image = love.graphics.newImage("assets/spritemap.png")
 
@@ -84,8 +89,27 @@ function love.load()
     end
 end
 
+function love.update(dt)
+    -- Updating Pixel
+    gscreen.update(dt)
+end
+
 function love.draw()
-    for index, sprite in ipairs(SPRITEMAP.positions) do
-        love.graphics.draw(SPRITEMAP.image, SPRITEMAP.quads[sprite], index * SPRITEMAP.size_sprite, 10)
+    -- Start scaling of pixelart
+    gscreen.start()
+
+    local layer = 0
+    local counter = 0
+    for _, sprite in ipairs(SPRITEMAP.positions) do
+        love.graphics.draw(SPRITEMAP.image, SPRITEMAP.quads[sprite], 10 + counter * SPRITEMAP.size_sprite,
+            10 + layer * SPRITEMAP.size_sprite)
+        counter = counter + 1
+        if counter > 5 then
+            counter = 0
+            layer = layer + 1
+        end
     end
+    
+    -- End scaling of pixelart
+    gscreen.stop()
 end
