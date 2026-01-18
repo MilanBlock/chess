@@ -59,11 +59,37 @@ SPRITEMAP = {
     size_sprite = 16
 }
 
+DEFAULT_BOARD = {
+    spacing = 3,
+    size = 8,
+    figures = {
+        { "black_rook", "black_knight", "black_bishop", "black_queen", "black_king", "black_bishop", "black_knight", "black_rook" },
+        { "black_pawn", "black_pawn",   "black_pawn",   "black_pawn",  "black_pawn", "black_pawn",   "black_pawn",   "black_pawn" },
+        { nil,          nil,            nil,            nil,           nil,          nil,            nil,            nil },
+        { nil,          nil,            nil,            nil,           nil,          nil,            nil,            nil },
+        { nil,          nil,            nil,            nil,           nil,          nil,            nil,            nil },
+        { nil,          nil,            nil,            nil,           nil,          nil,            nil,            nil },
+        { "white_pawn", "white_pawn",   "white_pawn",   "white_pawn",  "white_pawn", "white_pawn",   "white_pawn",   "white_pawn" },
+        { "white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook" },
+    },
+}
+
+local game
+
 function love.load()
+    -- Load classic
+    Object = require "lib.classic"
+
     -- Load SYSL-Pixel
-    _G.gscreen = require("lib.pixel")
+    _G.gscreen = require "lib.pixel"
     gscreen.load(4)
     gscreen.toggle_cursor()
+
+    -- Load helper-functions
+    _G.helper = require "helper"
+
+    -- Load classes
+    Game = require "game"
 
     -- Load spritemap
     SPRITEMAP.image = love.graphics.newImage("assets/spritemap.png")
@@ -87,29 +113,39 @@ function love.load()
                 SPRITEMAP.height)
         end
     end
+
+    -- Create game
+    game = Game()
 end
 
 function love.update(dt)
     -- Updating Pixel
     gscreen.update(dt)
+
+    -- Update Game
+    game:update(dt)
 end
 
 function love.draw()
     -- Start scaling of pixelart
     gscreen.start()
 
-    local layer = 0
-    local counter = 0
-    for _, sprite in ipairs(SPRITEMAP.positions) do
-        love.graphics.draw(SPRITEMAP.image, SPRITEMAP.quads[sprite], 10 + counter * SPRITEMAP.size_sprite,
-            10 + layer * SPRITEMAP.size_sprite)
-        counter = counter + 1
-        if counter > 5 then
-            counter = 0
-            layer = layer + 1
-        end
-    end
-    
+    -- TEMPORARY to confirm correct loading of sprites
+    -- local layer = 0
+    -- local counter = 0
+    -- for _, sprite in ipairs(SPRITEMAP.positions) do
+    --     love.graphics.draw(SPRITEMAP.image, SPRITEMAP.quads[sprite], 10 + counter * SPRITEMAP.size_sprite,
+    --         10 + layer * SPRITEMAP.size_sprite)
+    --     counter = counter + 1
+    --     if counter > 5 then
+    --         counter = 0
+    --         layer = layer + 1
+    --     end
+    -- end
+
+    -- Draw game
+    game:draw()
+
     -- End scaling of pixelart
     gscreen.stop()
 end
