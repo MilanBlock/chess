@@ -7,13 +7,21 @@ function Screen:new(x, y, width, heigth)
 end
 
 function Screen:addObject(object)
-    table.insert(self.content, object)
+    if object ~= nil then
+        table.insert(self.content, object)
+    end
 end
 
 function Screen:removeObject(object)
     local index = helper.findInTable(self.content, object)
     if index ~= nil then
         table.remove(self.content, index)
+    end
+end
+
+function Screen:mousepressed(x, y, button)
+    for _, object in ipairs(self.content) do
+        object:mousepressed(x - object.x, y - object.y, button)
     end
 end
 

@@ -1,6 +1,7 @@
 local Game = Object:extend()
 local Screen = require "screen"
 local Sprite = require "sprite"
+local Figure = require "figure"
 
 function Game:new()
     -- Initialize screen background
@@ -51,29 +52,39 @@ function Game:new()
     end
 
 
-    -- Initialize screen board
-    self.board = Screen(DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite, DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite,
+    -- Initialize screen figures
+    self.figures = Screen(DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite, DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite,
         SPRITEMAP.size_sprite * DEFAULT_BOARD.size,
         SPRITEMAP.size_sprite * DEFAULT_BOARD.size)
 
     -- Position figures
+    self.positions = {}
     for y = 1, DEFAULT_BOARD.size do
+        self.positions[y] = {}
         for x = 1, DEFAULT_BOARD.size do
-            self.board:addObject(Sprite((x - 1) * SPRITEMAP.size_sprite, (y - 1) * SPRITEMAP.size_sprite,
-            DEFAULT_BOARD.figures[y][x]))
-            print(DEFAULT_BOARD.figures[y][x])
+            if DEFAULT_BOARD.figures[y][x] ~= nil then
+                self.positions[y][x] = Figure(x, y, DEFAULT_BOARD.figures[y][x])
+                self.figures:addObject(self.positions[y][x])
+            else
+                self.positions[y][x] = nil
+            end
         end
     end
 end
 
+function Game:mousepressed(x, y, button)
+    self.background:mousepressed(x - self.background.x, y - self.background.y, button)
+    self.figures:mousepressed(x - self.figures.x, y - self.figures.y, button)
+end
+
 function Game:update(dt)
     self.background:update(dt)
-    self.board:update(dt)
+    self.figures:update(dt)
 end
 
 function Game:draw()
     self.background:draw(0, 0)
-    self.board:draw(0, 0)
+    self.figures:draw(0, 0)
 end
 
 return Game

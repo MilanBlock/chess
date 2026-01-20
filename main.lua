@@ -74,6 +74,8 @@ DEFAULT_BOARD = {
     },
 }
 
+SCALE = 4
+
 local game
 
 function love.load()
@@ -82,7 +84,7 @@ function love.load()
 
     -- Load SYSL-Pixel
     _G.gscreen = require "lib.pixel"
-    gscreen.load(4)
+    gscreen.load(SCALE)
     gscreen.toggle_cursor()
 
     -- Load helper-functions
@@ -116,6 +118,10 @@ function love.load()
 
     -- Create game
     game = Game()
+end
+
+function love.mousepressed(x, y, button)
+    game:mousepressed(x / SCALE, y / SCALE, button)
 end
 
 function love.update(dt)

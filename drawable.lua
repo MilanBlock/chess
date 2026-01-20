@@ -7,6 +7,10 @@ function Drawable:new(x, y, width, height)
     self.height = height or 10
 end
 
+function Drawable:mousepressed(x, y, button)
+    
+end
+
 function Drawable:update(dt)
 end
 
