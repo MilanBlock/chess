@@ -1,4 +1,5 @@
--- spritemap will be saved left to right, top to bottom
+-- Spritemap will be saved left to right, top to bottom
+-- Figure names must be formated as [player]_[piece]
 SPRITEMAP = {
     positions = {
         "tile_blue",
@@ -62,6 +63,16 @@ SPRITEMAP = {
 DEFAULT_BOARD = {
     spacing = 3,
     size = 8,
+    figuresfake = {
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, "white_king", nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+        { nil, nil, nil, nil, nil, nil, nil, nil },
+    },
     figures = {
         { "black_rook", "black_knight", "black_bishop", "black_queen", "black_king", "black_bishop", "black_knight", "black_rook" },
         { "black_pawn", "black_pawn",   "black_pawn",   "black_pawn",  "black_pawn", "black_pawn",   "black_pawn",   "black_pawn" },
