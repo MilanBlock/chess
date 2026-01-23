@@ -113,11 +113,23 @@ end
 function Game:createMovesScreen(figure_showing_moves)
     if figure_showing_moves == nil then
         self.moves = nil
+        self.posible_positions = nil
         return
     end
 
     self.moves = Screen(DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite, DEFAULT_BOARD.spacing + SPRITEMAP.size_sprite,
         SPRITEMAP.size_sprite * DEFAULT_BOARD.size, SPRITEMAP.size_sprite * DEFAULT_BOARD.size)
+
+    self.posible_positions = {
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+        { "nil", "nil", "nil", "nil", "nil", "nil", "nil", "nil" },
+    }
 
     self.inputMoves[figure_showing_moves.figure.piece](self, figure_showing_moves.figure, figure_showing_moves.x,
         figure_showing_moves.y)
@@ -127,7 +139,8 @@ Game.inputMoves = {}
 
 function Game.inputMoves.step(game, figure, x, y)
     if game:isValidMovingSquare(x, y, figure.player) then
-        game.moves:addObject(Figure(x, y, figure.player .. "_dot"))
+        game.posible_positions[y][x] = Figure(x, y, figure.player .. "_dot")
+        game.moves:addObject(game.posible_positions[y][x])
         if game.positions[y][x] == "nil" then
             return true
         end
